@@ -1,3 +1,4 @@
 /node_modules
 .env
 .sequelizerc
+data-modeling.md

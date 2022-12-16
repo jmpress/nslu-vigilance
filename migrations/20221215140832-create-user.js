@@ -9,22 +9,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      first - name: {
+      "first-name": {
         type: Sequelize.STRING
       },
-      last - name: {
+      "last-name": {
         type: Sequelize.STRING
       },
       email: {
+        allowNull: false,
+        unique: true,
         type: Sequelize.STRING
       },
-      store - number: {
+      "salted-hashed-pass": {
+        type: Sequelize.STRING
+      },
+      "store-number": {
         type: Sequelize.INTEGER
       },
-      email - verified: {
-        type: Sequelize.BOOLEAN
-      },
-      steward: {
+      "email-verified": {
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       createdAt: {

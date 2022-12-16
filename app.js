@@ -17,7 +17,7 @@ const path = require('path');
 //const { makeSaltedHash, comparePasswords } = require('./utils/utils');
 
 //controllers
-const ticketRouter = require('./controllers/ticketController');
+const ulpRouter = require('./controllers/ULPController');
 const authRouter = require('./controllers/authController');
 
 //database setup
@@ -107,7 +107,7 @@ app.get('/', (req, res, next) => {
 });
 
 
-app.use('/ticket', ticketRouter);
+app.use('/ulp', ulpRouter);
 app.use('/auth', authRouter);
 
 // Add your code to start the server listening at PORT below:   

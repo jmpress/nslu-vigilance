@@ -11,7 +11,7 @@ This app was built to carry out the following behaviors:<br>
 
 ## Specs
 + User model has the following fields: firstName, lastName, storeNumber, email address,
-   `npx sequelize-cli model:generate --name User --attributes first-name:string,last-name:string,email:string,store-number:integer, email-verified:boolean`
+   `npx sequelize-cli model:generate --name User --attributes first-name:string,last-name:string,email:string,store-number:integer,email-verified:boolean,steward:boolean`
 + Create a method to do __blah__.
 + Create a route that does __blah__ and sends back __blah__.
 
@@ -38,15 +38,12 @@ Please contact j.michael.press@gmail.com with questions, comments, or concerns. 
    + Express
    + React
    + PostreSQL
+   + Redis
 
 ## Notable `npm` packages
    + Sequelizer ORM
    + Passport.js
    
-   
-### Notable Node packages used
-	+ Passport.js or ioredis or whatever
-
 ### License
 This software is released under the GNU general public license.
 

@@ -12,19 +12,19 @@ const express = require('express');
 const db = require('../models/index');
 const Router = require('express-promise-router');
 const authRouter = new Router();
-//const { makeSaltedHash, comparePasswords, sanitizeInput } = require('../utils/utils');
+const { makeSaltedHash, comparePasswords, sanitizeInput } = require('../utils/utils');
 const passport = require('passport');
 
 authRouter.route('/login')
     .post(passport.authenticate('local', { 
-        successRedirect: 'back', 
+        successRedirect: 'back',            //TODO
         failureRedirect: '/auth/login' 
     }));
 
 authRouter.post('/logout', (req, res, next) => {
     req.logout(function(err) {
       if (err) { return next(err); }
-      res.redirect('back');
+      res.redirect('back');         //TODO fix res.renders
     });
   });
 
