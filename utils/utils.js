@@ -30,4 +30,15 @@ function sanitizeInput(stringle, numChar){
     return stringle;
 }
 
-module.exports = { makeSaltedHash, comparePasswords, sanitizeInput };
+function sanitizeUlpdata(suspectData){
+    let { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary } = suspectData;
+    date_of_incident = sanitizeInput(date_of_incident, 10);
+    staff_witnesses = sanitizeInput(staff_witnesses, 50);
+    offending_manager = sanitizeInput(offending_manager, 30);
+    incident_summary = sanitizeInput(incident_summary, 255);
+
+    const cleanData = { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary };
+    return cleanData;
+}
+
+module.exports = { makeSaltedHash, comparePasswords, sanitizeInput, sanitizeUlpdata };

@@ -83,14 +83,12 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
   new LocalStrategy(async function (username, password, done) {
     const result = await db.User.findOne({where: {email: username}})
-    console.log("result:");
-    console.log(result);
     if(!result){return done(new Error('no result in db'));}
     const user = result.dataValues;
       if (!user) {
           console.log('Incorrect username.');
           return done(null, false, { message: 'Incorrect username.' });
-      } else if (!(await comparePasswords(password, user["salted-hashed-pass"]))) {
+      } else if (!(await comparePasswords(password, user.salted_hashed_pass))) {
           console.log('Incorrect password');
           return done(null, false, { message: 'Incorrect password.' });
       } else {

@@ -1,18 +1,8 @@
-/*
-
-Use the library bcrypt and create registration, login, and logout endpoints.
-
-You can create a hash from the users registration password and store it in the database. Once the user logs in, that password can be compared to the one stored in the database for authentication.
-
-Make sure you’re able to create a user session.
-
-*/
-
 const express = require('express');
 const db = require('../models/index');
 const Router = require('express-promise-router');
 const authRouter = new Router();
-const { makeSaltedHash, comparePasswords, sanitizeInput } = require('../utils/utils');
+const { makeSaltedHash, sanitizeInput } = require('../utils/utils');
 const passport = require('passport');
 
 authRouter.route('/login')
@@ -34,26 +24,26 @@ authRouter.route('/register')
     })
     .post(async (req, res, next) => {
         console.log(req.body);
-        const { firstName, lastName, userEmail, userPassA, userPassB } = req.body;
+        const { first_name, last_name, email, user_pass_a, user_pass_b } = req.body;
         //check passA and passB are equal 
-        if(userPassA !== userPassB){res.redirect('/auth/register');}
+        if(user_pass_a !== user_pass_b){res.redirect('/auth/register');}
         //Salt and hash the pass
-        const saltedPass = await makeSaltedHash(userPassA);
+        const salted_hashed_pass = await makeSaltedHash(user_pass_a);
         //save new user to database.
         const newUser = {
-            "first-name": firstName, 
-            "last-name": lastName,
-            email: userEmail,
-            "store-number": 16,
-            "salted-hashed-pass": saltedPass,
-            "email-verified": false
+            first_name, 
+            last_name,
+            email,
+            store_number: 16,
+            salted_hashed_pass,
+            email_verified: false
         }
         console.log(newUser);
-        const regUser = await db.User.create(newUser);
+        const result = await db.User.create(newUser);
+        const regUser = result.dataValues;
         console.log("auto-generated ID:", regUser.id);
         req.body = regUser;
-        
-        console.log('dummy DB success message');
+
         res.redirect('/auth/login');
     });
 

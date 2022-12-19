@@ -3,7 +3,7 @@ const db = require('../models/index');
 const Router = require('express-promise-router');
 const ulpRouter = new Router();
 const imageCache = require('../utils/cache');
-const { sanitizeInput } = require('../utils/utils');
+const { sanitizeInput, sanitizeUlpdata } = require('../utils/utils');
 
 ulpRouter.get('/all', async (req, res, next) => {
     //read all accessible tickets for INBOX view
@@ -19,6 +19,17 @@ ulpRouter.route('/:id')
 
 ulpRouter.post('/new', async (req, res, next) => {
     //submit a brand-new ticket
+    console.log(req.body)
+    let { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary } = req.body;
+
+    let suspectData = { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary };
+    const cleanData = sanitizeUlpdata(suspectData);
+    console.log('cleaned!::');
+    console.log(cleanData);
+    const newUlpdata = await db.Ulpdata.create(cleanData);
+    console.log('added!::')
+    console.log(newUlpdata);
+    res.status(200).send(newUlpdata);
 });
 
 ulpRouter.delete('/delete', async (req, res, next) => {

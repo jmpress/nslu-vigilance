@@ -9,10 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      "first-name": {
+      first_name: {
         type: Sequelize.STRING
       },
-      "last-name": {
+      last_name: {
         type: Sequelize.STRING
       },
       email: {
@@ -20,13 +20,13 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      "salted-hashed-pass": {
+      salted_hashed_pass: {
         type: Sequelize.STRING
       },
-      "store-number": {
+      store_number: {
         type: Sequelize.INTEGER
       },
-      "email-verified": {
+      email_verified: {
         defaultValue: false,
         type: Sequelize.BOOLEAN
       },

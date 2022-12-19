@@ -15,7 +15,9 @@ This app was built to carry out the following behaviors:<br>
 
 ## Specs
 + User model has the following fields: firstName, lastName, storeNumber, email address,
-   `npx sequelize-cli model:generate --name User --attributes first-name:string,last-name:string,email:string,store-number:integer,email-verified:boolean,steward:boolean`
+   `npx sequelize-cli model:generate --name User --attributes first-name:string,last-name:string,email:string,store-number:integer,email-verified:boolean`
++ Ulpdata model has the following fields: submittedBy, 
+   `npx sequelize-cli model:generate --name Ulpdata --attributes submitted-by:integer,subsec1:boolean,subsec2:boolean,subsec3:boolean,subsec4:boolean,subsec5:boolean,subsec6:boolean,subsec7:boolean,date-of-incident:string,staff-witnesses:string,offending-manager:string,incident-summary:text`
 + Create a method to do __blah__.
 + Create a route that does __blah__ and sends back __blah__.
 
