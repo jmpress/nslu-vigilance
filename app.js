@@ -14,14 +14,14 @@ const http = require('http');
 const morgan = require('morgan');
 const dotenv = require('dotenv').config();
 const path = require('path');
-//const { makeSaltedHash, comparePasswords } = require('./utils/utils');
+const { comparePasswords } = require('./utils/utils');
 
 //controllers
 const ulpRouter = require('./controllers/ULPController');
 const authRouter = require('./controllers/authController');
 
 //database setup
-//const db = require('./models/index')
+const db = require('./models/index')
 const connectRedis = require('connect-redis');
 const {redisClient} = require('./db/sessionDB');
 redisClient.connect().catch(console.error);
@@ -83,16 +83,14 @@ passport.deserializeUser(async (id, done) => {
 passport.use(
   new LocalStrategy(async function (username, password, done) {
     const result = await db.User.findOne({where: {email: username}})
-    /*.then(function(err, user) {
-      console.log(user);
-      if (err) { return done(err); }
-    */
+    console.log("result:");
+    console.log(result);
     if(!result){return done(new Error('no result in db'));}
     const user = result.dataValues;
       if (!user) {
           console.log('Incorrect username.');
           return done(null, false, { message: 'Incorrect username.' });
-      } else if (!comparePasswords(password, user.password)) {
+      } else if (!(await comparePasswords(password, user["salted-hashed-pass"]))) {
           console.log('Incorrect password');
           return done(null, false, { message: 'Incorrect password.' });
       } else {
@@ -103,9 +101,8 @@ passport.use(
   ); 
     
 app.get('/', (req, res, next) => {
-  
+  res.redirect('/auth/login');
 });
-
 
 app.use('/ulp', ulpRouter);
 app.use('/auth', authRouter);
