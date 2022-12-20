@@ -99,7 +99,7 @@ passport.use(
   ); 
     
 app.get('/', (req, res, next) => {
-  res.redirect('/auth/login');
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 app.use('/ulp', ulpRouter);

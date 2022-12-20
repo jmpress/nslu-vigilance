@@ -23,7 +23,6 @@ authRouter.route('/register')
         //res.render('newUser');
     })
     .post(async (req, res, next) => {
-        console.log(req.body);
         const { first_name, last_name, email, user_pass_a, user_pass_b } = req.body;
         //check passA and passB are equal 
         if(user_pass_a !== user_pass_b){res.redirect('/auth/register');}
@@ -38,13 +37,9 @@ authRouter.route('/register')
             salted_hashed_pass,
             email_verified: false
         }
-        console.log(newUser);
         const result = await db.User.create(newUser);
         const regUser = result.dataValues;
-        console.log("auto-generated ID:", regUser.id);
-        req.body = regUser;
-
-        res.redirect('/auth/login');
+        res.status(200).send(regUser);
     });
 
 
@@ -55,6 +50,7 @@ authRouter.get('/profile', (req, res, next) => {
 
 
 //TODO make sure this validates the actual user model
+//CURRENTLY not used
 function validateUser(req, res, next){
     console.log(req.body);
     let { firstName, lastName, userEmail, userPassA, userPassB } = req.body;
