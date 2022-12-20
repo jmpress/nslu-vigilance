@@ -1,0 +1,9 @@
+
+
+body {
+    font-family: sans-serif;
+    display: grid;
+    grid-template: 1fr / 1fr;
+    justify-items: center;
+    
+}
