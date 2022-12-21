@@ -5,9 +5,19 @@ const ulpRouter = new Router();
 const imageCache = require('../utils/cache');
 const { sanitizeInput, sanitizeUlpdata } = require('../utils/utils');
 
+//this should be locked down to admins
 ulpRouter.get('/all', async (req, res, next) => {
-    //read all accessible tickets for INBOX view
+    const rawUlpdata = await db.Ulpdata.findAll();
+    let formattedUlpdata = []
+    rawUlpdata.forEach(element => {
+        formattedUlpdata.push(element.dataValues);
+    })
+    //console.log(formattedUlpdata);
+    res.status(200).send(formattedUlpdata);
 });
+
+//write similar functionality that shows only all tickets that match a current steward's store
+//write similar functionality that shows only all tickets submitted by current user
 
 ulpRouter.route('/:id')
     .get(async (req, res, next) => {
@@ -20,8 +30,10 @@ ulpRouter.route('/:id')
 ulpRouter.post('/new', async (req, res, next) => {
     //submit a brand-new ticket
     let { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary } = req.body;
-
-    let suspectData = { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary };
+    console.log('req.user = ');
+    console.log(req.user);
+    const store_number = 1;
+    let suspectData = { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, store_number, staff_witnesses, offending_manager, incident_summary };
     const cleanData = sanitizeUlpdata(suspectData);
     const newUlpdata = await db.Ulpdata.create(cleanData);
     res.status(200).send(newUlpdata);

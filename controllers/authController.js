@@ -3,18 +3,15 @@ const db = require('../models/index');
 const Router = require('express-promise-router');
 const authRouter = new Router();
 const { makeSaltedHash, sanitizeInput } = require('../utils/utils');
-const passport = require('passport');
+//const passport = require('passport');
 
-authRouter.route('/login')
-    .post(passport.authenticate('local', { 
-        successRedirect: '/auth/profile',
-        failureRedirect: '/auth/login' 
-    }));
+
 
 authRouter.post('/logout', (req, res, next) => {
     req.logout(function(err) {
       if (err) { return next(err); }
-      res.redirect('/auth/login');         //TODO fix res.renders
+      //console.log(req);
+      res.status(200).send();         //TODO fix res.renders
     });
   });
 
@@ -44,8 +41,9 @@ authRouter.route('/register')
 
 
 authRouter.get('/profile', (req, res, next) => {
-    console.log(req.user);
-    res.status(200).send(req.user);
+    console.log("PROFILE HERE");
+    console.log(req.user)
+    res.status(200).send();
 })
 
 

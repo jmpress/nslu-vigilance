@@ -51,7 +51,7 @@ app.use(morgan('dev'));
 // set up session
 app.use(session({
     name: 'nsluUserToken',
-    secret: process.env.SESSION_SECRET || 'Togekiss',  
+    secret: process.env.SESSION_SECRET,  
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000*60*60, secure: false, sameSite: 'none' },
@@ -64,20 +64,24 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, done) => {
+  //console.log('inside Serialize')
+  //console.log(user.id);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
+  //console.log('inside Deserialize');
   const loggedInUser = await db.User.findOne({
     where: {
       id: id
     }
   });
-    if (!loggedInUser.dataValues) {
-      return done(new Error('failed to deserialize'));
-    }
-    done(null, loggedInUser.dataValues);
-  
+  //console.log(loggedInUser.dataValues)
+  if (!loggedInUser.dataValues) {
+    return done(new Error('failed to deserialize'));
+  }
+  done(null, loggedInUser.dataValues);
+
 });
 
 passport.use(
@@ -101,6 +105,12 @@ passport.use(
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
+
+app.route('/auth/login')
+    .post(passport.authenticate('local', { 
+        successRedirect: '/auth/profile',
+        failureRedirect: '/' 
+    }));
 
 app.use('/ulp', ulpRouter);
 app.use('/auth', authRouter);

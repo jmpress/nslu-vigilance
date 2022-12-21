@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     subsec6: DataTypes.BOOLEAN,
     subsec7: DataTypes.BOOLEAN,
     date_of_incident: DataTypes.STRING,
+    store_number: DataTypes.INTEGER,
     staff_witnesses: DataTypes.STRING,
     offending_manager: DataTypes.STRING,
     incident_summary: DataTypes.TEXT

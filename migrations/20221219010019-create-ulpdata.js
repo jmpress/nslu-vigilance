@@ -36,6 +36,9 @@ module.exports = {
       date_of_incident: {
         type: Sequelize.STRING
       },
+      store_number: {
+        type: Sequelize.INTEGER
+      },
       staff_witnesses: {
         type: Sequelize.STRING
       },
