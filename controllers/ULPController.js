@@ -17,7 +17,36 @@ ulpRouter.get('/all', async (req, res, next) => {
 });
 
 //write similar functionality that shows only all tickets that match a current steward's store
+ulpRouter.get('/mystore', async (req, res, next) => {
+    console.log(`List of tickets belonging to store number ${req.user.store_number}`)
+    const rawUlpdata = await db.Ulpdata.findAll({
+                                            where:{
+                                                store_number: req.user.store_number
+                                            }
+                                        });
+    let formattedUlpdata = []
+    rawUlpdata.forEach(element => {
+        formattedUlpdata.push(element.dataValues);
+    })
+    //console.log(formattedUlpdata);
+    res.status(200).send(formattedUlpdata);
+});
+
 //write similar functionality that shows only all tickets submitted by current user
+ulpRouter.get('/mine', async (req, res, next) => {
+    console.log(`List of tickets belonging to User ${req.user.id}`);
+    const rawUlpdata = await db.Ulpdata.findAll({
+        where:{
+            submitted_by: req.user.id
+        }
+    });
+    let formattedUlpdata = []
+    rawUlpdata.forEach(element => {
+    formattedUlpdata.push(element.dataValues);
+    })
+    //console.log(formattedUlpdata);
+    res.status(200).send(formattedUlpdata);
+});
 
 ulpRouter.route('/:id')
     .get(async (req, res, next) => {
@@ -29,10 +58,9 @@ ulpRouter.route('/:id')
 
 ulpRouter.post('/new', async (req, res, next) => {
     //submit a brand-new ticket
-    let { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary } = req.body;
-    console.log('req.user = ');
-    console.log(req.user);
-    const store_number = 1;
+    let { subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, staff_witnesses, offending_manager, incident_summary } = req.body;
+    const submitted_by = req.user.id;
+    const store_number = req.user.store_number;
     let suspectData = { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, store_number, staff_witnesses, offending_manager, incident_summary };
     const cleanData = sanitizeUlpdata(suspectData);
     const newUlpdata = await db.Ulpdata.create(cleanData);

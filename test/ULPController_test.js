@@ -21,7 +21,6 @@ describe('POST new Ulpdata to db', () => {
             subsec6: false,
             subsec7: false,
             date_of_incident: '10-11-2020',
-            store_number: 1,
             staff_witnesses: 'Gilke Fnurssen',
             offending_manager: 'Kniipe Jeksl',
             incident_summary: 'I haad fuud in the fridge and Knippe 8te it all. Gilke herd him brag abot it.'
@@ -46,7 +45,6 @@ describe('POST new Ulpdata to db', () => {
             subsec6: false,
             subsec7: false,
             date_of_incident: '10-14-2020',
-            store_number: 1,
             staff_witnesses: 'Snephe Vurkl',
             offending_manager: 'Kniipe Jeksl',
             incident_summary: 'Kniipe tuuched my foot and I dont like it.'
@@ -80,7 +78,9 @@ describe('GET all tickets that I submitted', () => {
         expect(response.body).to.be.an('array');
         expect(response.body.length).to.be.greaterThan(0);
         expect(response.body[0].offending_manager).equal('Kniipe Jeksl');
-        expect(response.body[0].submitted_by).equal(/*user ID*/)
+        for(let i = 0 ; i < response.body.length; i++){
+            expect(response.body[i].submitted_by).equal(1);
+        };
     });
 });
 
@@ -92,6 +92,8 @@ describe('GET all tickets from my store', () => {
         expect(response.body).to.be.an('array');
         expect(response.body.length).to.be.greaterThan(0);
         expect(response.body[0].offending_manager).equal('Kniipe Jeksl');
-        //expect(response.body[0].store_number).equal(/*user store number*/);
+        for(let i = 0 ; i < response.body.length; i++){
+            expect(response.body[i].store_number).equal(1);
+        };
     });
 });

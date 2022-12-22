@@ -42,7 +42,7 @@ authRouter.route('/register')
 
 authRouter.get('/profile', (req, res, next) => {
     console.log("PROFILE HERE");
-    console.log(req.user)
+    //console.log(req.user)
     res.status(200).send();
 })
 
