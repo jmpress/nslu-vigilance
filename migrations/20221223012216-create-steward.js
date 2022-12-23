@@ -11,11 +11,19 @@ module.exports = {
       },
       steward_id: {
         unique: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: User,
+          key: 'id'
+        },
       },
       store_number: {
         unique: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: Store,
+          key: 'id'
+        },
       },
       createdAt: {
         allowNull: false,

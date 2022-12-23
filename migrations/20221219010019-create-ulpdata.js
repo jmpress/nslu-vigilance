@@ -10,7 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       submitted_by: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: User,
+          key: 'id'
+        }
       },
       subsec1: {
         type: Sequelize.BOOLEAN
@@ -37,7 +41,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       store_number: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: Store,
+          key: 'id'
+        },
       },
       staff_witnesses: {
         type: Sequelize.STRING
