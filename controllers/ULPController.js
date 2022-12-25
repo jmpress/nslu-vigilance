@@ -3,16 +3,12 @@ const db = require('../models/index');
 const Router = require('express-promise-router');
 const ulpRouter = new Router();
 const imageCache = require('../utils/cache');
-const { sanitizeInput, sanitizeUlpdata } = require('../utils/utils');
+const { sanitizeInput, sanitizeUlpdata, formatUlpdata } = require('../utils/utils');
 
 //this should be locked down to admins
 ulpRouter.get('/all', async (req, res, next) => {
     const rawUlpdata = await db.Ulpdata.findAll();
-    let formattedUlpdata = []
-    rawUlpdata.forEach(element => {
-        formattedUlpdata.push(element.dataValues);
-    })
-    //console.log(formattedUlpdata);
+    const formattedUlpdata = formatUlpdata(rawUlpdata);
     res.status(200).send(formattedUlpdata);
 });
 
@@ -24,11 +20,7 @@ ulpRouter.get('/mystore', async (req, res, next) => {
                                                 store_number: req.user.store_number
                                             }
                                         });
-    let formattedUlpdata = []
-    rawUlpdata.forEach(element => {
-        formattedUlpdata.push(element.dataValues);
-    })
-    //console.log(formattedUlpdata);
+    const formattedUlpdata = formatUlpdata(rawUlpdata);    
     res.status(200).send(formattedUlpdata);
 });
 
@@ -44,7 +36,6 @@ ulpRouter.get('/mine', async (req, res, next) => {
     rawUlpdata.forEach(element => {
     formattedUlpdata.push(element.dataValues);
     })
-    //console.log(formattedUlpdata);
     res.status(200).send(formattedUlpdata);
 });
 

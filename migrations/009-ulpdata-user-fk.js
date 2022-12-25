@@ -16,6 +16,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return await queryInterface.removeConstraint('Users','fk_ulpdata_user_id');
+    return await queryInterface.removeConstraint('Ulpdata','fk_ulpdata_user_id');
   }
 };

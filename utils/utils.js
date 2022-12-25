@@ -41,4 +41,12 @@ function sanitizeUlpdata(suspectData){
     return cleanData;
 }
 
-module.exports = { makeSaltedHash, comparePasswords, sanitizeInput, sanitizeUlpdata };
+function formatUlpdata(rawUlpdata){
+    let formattedUlpdata = []
+    rawUlpdata.forEach(element => {
+        formattedUlpdata.push(element.dataValues);
+    })
+    return formattedUlpdata;
+}
+
+module.exports = { makeSaltedHash, comparePasswords, sanitizeInput, sanitizeUlpdata, formatUlpdata };
