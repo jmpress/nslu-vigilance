@@ -28,10 +28,6 @@ module.exports = {
       },
       store_number: {
         type: Sequelize.INTEGER,
-        references: {
-          model: Store,
-          key: 'id'
-        },
         validate: {
           isNumeric: true,
           min: 1
