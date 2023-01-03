@@ -10,15 +10,15 @@ This app was built to carry out the following behaviors:<br>
 + Keep track of who is "Shop Steward" (correct term?) at each store.
 + Notify the Shop Steward at that member's store that someone has submitted a form, and allow them access to view the form (including email address of submitter to allow follow-up communication).
 + Allow members to fill out a simple web form containing data relevant to form NLRB-501.
-+ Information that is unlikely to change, such as Employer Address or Union Address can be left off to simplify the form, and can be accessed by importing the objects from the `./db/employerData.js` and `./db/unionData.js` files.
-+ The NLRB has a fillable .pdf for this form. There should be a method to allow a Shop Steward to use the form data to fill out the fillable .pdf and mail it to the NLRB contact defined in the `./db/nlrbData.js` file.
++ Information that is unlikely to change, such as Employer Address or Union Address is not included on the web form for simplicity of use for the end user, and can be accessed by importing the objects from the `./db/employerData.js` and `./db/unionData.js` files.
+
 
 ## Specs
 + User model 
 + Ulpdata model 
 + Steward model 
 + Store model
-+ 
++ Admin model
 
 ## Setup/Installation Requirements
 + Fork and clone this repository locally.
@@ -28,7 +28,7 @@ This app was built to carry out the following behaviors:<br>
 + navigate to localhost:3000 to begin using the program.
 
 ## Known Bugs
-+ 
++ The NLRB has a fillable .pdf for this form. There should be a method to allow a Shop Steward to use the form data to fill out the fillable .pdf and mail it to the NLRB contact defined in the `./db/nlrbData.js` file.
 
 ## Support and contact details
 Please contact j.michael.press@gmail.com with questions, comments, or concerns. You are also welcome to submit a pull request.

@@ -12,7 +12,6 @@ before(async () =>{
 describe('POST new Ulpdata to db', () => {
     it('Adds a new Ulpdata to the db and returns the db record', async () => {
         const ogUlpdata = {
-            submitted_by: 1,
             subsec1: true,
             subsec2: false,
             subsec3: false,
@@ -36,7 +35,6 @@ describe('POST new Ulpdata to db', () => {
     });
     it('Does it a second time, so we have two records to test', async () => {
         const ogUlpdata2 = {
-            submitted_by: 1,
             subsec1: true,
             subsec2: false,
             subsec3: false,
@@ -65,8 +63,7 @@ describe('GET all Ulpdata', () => {
                                 .get('/ulp/all');
         expect(response.status).equal(200);
         expect(response.body).to.be.an('array');     
-        //expect(response.body.length).equal(2);
-        //expect(response.body[1].offending_manager).equal('Kniipe Jeksl');
+        expect(response.body.length).equal(152);
     });
 });
 
@@ -76,8 +73,6 @@ describe('GET all tickets that I submitted', () => {
                                 .get('/ulp/mine');
         expect(response.status).equal(200);
         expect(response.body).to.be.an('array');
-        //expect(response.body.length).to.be.greaterThan(0);
-        //expect(response.body[0].offending_manager).equal('Kniipe Jeksl');
         for(let i = 0 ; i < response.body.length; i++){
             expect(response.body[i].submitted_by).equal(1);
         };
@@ -90,8 +85,7 @@ describe('GET all tickets from my store', () => {
                                 .get('/ulp/mystore');
         expect(response.status).equal(200);
         expect(response.body).to.be.an('array');
-        //expect(response.body.length).to.be.greaterThan(0);
-        //expect(response.body[0].offending_manager).equal('Kniipe Jeksl');
+        expect(response.body.length).equal(9);
         for(let i = 0 ; i < response.body.length; i++){
             expect(response.body[i].store_number).equal(1);
         };
@@ -99,11 +93,24 @@ describe('GET all tickets from my store', () => {
 });
 
 describe('GET details of one Ulpdata ticket', () => {
-    it('returns status 200', async () =>{
+    it('returns status 200, with a JSON formatted Ulpdata object of id = 2', async () =>{
         const response = await agent.get('/ulp/2');
         expect(response.status).equal(200);
         expect(response.headers["content-type"]).match(/json/);
         expect(response.body.id).equal(2);
-        //expect(response.body.staff_witnesses).equal('Snephe Vurkl');
+        expect(response.body.staff_witnesses).equal('Elena Romaguera');
     });
 });
+
+describe('DELETE one Ulpdata ticket', () => {
+    it('returns status 200 and the deleted record', async () => {
+        const response = await agent.delete('/ulp/2');
+        expect(response.status).equal(200);
+        expect(response.body.id).equal(2);
+
+    });
+    it('should have deleted the record from the database', async ()=> {
+        const response = await agent.get('ulp/2');
+        expect(response.status).equal(404);
+    });
+})
