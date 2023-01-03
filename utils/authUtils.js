@@ -16,10 +16,9 @@ async function isSteward(req, res, next){
     
 }
 
-/*
 async function isAdmin(req, res, next){
     try{
-        let { dataValues } = await db.Admin.findOne({where: {admin_id: req.user.id}});
+        let { dataValues } = await db.Admin.findOne({where: {user_id: req.user.id}});
         if(!dataValues){
             res.redirect('/ulp/mine');
         }else{
@@ -31,6 +30,5 @@ async function isAdmin(req, res, next){
     }
     
 }
-*/
 
-module.exports = { isSteward };
+module.exports = { isSteward, isAdmin };
