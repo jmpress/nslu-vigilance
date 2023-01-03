@@ -11,6 +11,7 @@ describe('register a new User via POST', () => {
             first_name: 'Gilke',
             last_name: 'Fnurssen',
             email: 'test@fake.com',
+            store_number: 12,
             user_pass_a: 'abcde',
             user_pass_b: 'abcde'
             
@@ -21,14 +22,14 @@ describe('register a new User via POST', () => {
                                 .send(newUserRegData);
         expect(response.headers["content-type"]).match(/json/);
         expect(response.status).equal(200);
-        expect(response.body.id).equal(2);
+        expect(response.body.id).equal(3002);
         expect(response.body.email).to.equal('test@fake.com');
 
     });
 });
 
 describe('log user in', () => {
-    it('returns status 302', async () => {
+    it('creates a session and returns status 302', async () => {
         
         const userLoginData = {
             username: 'test@test.com',
