@@ -4,6 +4,7 @@ const Router = require('express-promise-router');
 const ulpRouter = new Router();
 const imageCache = require('../utils/cache');
 const { sanitizeInput, sanitizeUlpdata, formatUlpdata } = require('../utils/utils');
+const { isSteward } = require('../utils/authUtils');
 
 //this should be locked down to admins
 ulpRouter.get('/all', async (req, res, next) => {
@@ -12,8 +13,8 @@ ulpRouter.get('/all', async (req, res, next) => {
     res.status(200).send(formattedUlpdata);
 });
 
-//write similar functionality that shows only all tickets that match a current steward's store
-ulpRouter.get('/mystore', async (req, res, next) => {
+//all tickets that match a currently logged-in steward's store
+ulpRouter.get('/mystore', isSteward, async (req, res, next) => {
     console.log(`List of tickets belonging to store number ${req.user.store_number}`)
     const rawUlpdata = await db.Ulpdata.findAll({
                                             where:{
@@ -24,7 +25,7 @@ ulpRouter.get('/mystore', async (req, res, next) => {
     res.status(200).send(formattedUlpdata);
 });
 
-//write similar functionality that shows only all tickets submitted by current user
+//all tickets submitted by currently logged user
 ulpRouter.get('/mine', async (req, res, next) => {
     console.log(`List of tickets belonging to User ${req.user.id}`);
     const rawUlpdata = await db.Ulpdata.findAll({
@@ -32,16 +33,23 @@ ulpRouter.get('/mine', async (req, res, next) => {
             submitted_by: req.user.id
         }
     });
-    let formattedUlpdata = []
-    rawUlpdata.forEach(element => {
-    formattedUlpdata.push(element.dataValues);
-    })
+    const formattedUlpdata = formatUlpdata(rawUlpdata);
     res.status(200).send(formattedUlpdata);
 });
 
 ulpRouter.route('/:id')
     .get(async (req, res, next) => {
         //read ONE accessible ticket to show details
+        const {dataValues} = await db.Ulpdata.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        if(!dataValues){
+            res.status(404).send();
+        } else {
+            res.status(200).send(dataValues);
+        }
     })
     .put(async (req, res, next) => {
         //edit details of ONE accessible ticket
@@ -65,19 +73,6 @@ ulpRouter.delete('/delete', async (req, res, next) => {
 
 
 /*
-ulpRouter.get('/all', async (req, res, next) => {
-    const cachedValue = imageCache.get(req, res, next);
-    if(cachedValue){
-        images = cachedValue;
-    } else {
-        images = await db.Image.findAll();
-        res.locals.data = images;
-        imageCache.set(req, res, next)
-    }
-    //console.log('images = ' + images)
-    res.render('imageBrowser', {image: images, user:req.user}); 
-});
-
 ulpRouter.get('/:id', async (req, res, next) => {  
     const cachedValue = imageCache.get(req, res, next);
     let target;
@@ -106,23 +101,6 @@ ulpRouter.get('/:id', async (req, res, next) => {
     res.render('imageDetail', {image: target[0].dataValues, caption: caps, user:req.user});
 });
 
-ulpRouter.post('/caption/new', validateCaption, async (req, res, next) => {
-    const { newCap, userID, imageID } = req.body;
-    const userCaption = {
-        captionContent: newCap,
-        imageID,
-        captionerID: userID,
-        rating: 0
-    }
-    const newCaption = await db.Caption.create(userCaption);
-    req.url = `/${imageID}`;
-    console.log(req.url);
-    imageCache.clear(req, res, next);
-    res.redirect(`/image/${imageID}`)
-});
-
-
-/* further work
 ulpRouter.put('/caption/rate/:id', (req, res, next) => {
     //I need to reference both the caption ID and the new rating to add; what's the best way to pass this data in? probably ?id=x&?rating=y
     
@@ -130,20 +108,6 @@ ulpRouter.put('/caption/rate/:id', (req, res, next) => {
     
     res.status(200).send();
 });
-
-
-ulpRouter.post('/new', (req, res, next) => {
-    //route for adding a brand new image
-});
-
-ulpRouter.delete('/delete', (req, res, next) => {
-    //delete an image from the database, along with all its captions.
-});
-
-ulpRouter.delete('/caption/delete', (req, res, next) => {
-    //delete a single caption.
-});
-
 */
 
 module.exports = ulpRouter;
