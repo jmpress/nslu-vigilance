@@ -9,8 +9,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const cors = require('cors');
 
-
-const http = require('http');
 const morgan = require('morgan');
 const dotenv = require('dotenv').config();
 const path = require('path');
@@ -27,28 +25,27 @@ const {redisClient} = require('./db/sessionDB');
 redisClient.connect().catch(console.error);
 const RedisStore = connectRedis(session);
 
-
 // set paths for static content
 app.use('/public', express.static(path.join(__dirname, "public")));
 
 //view engine setup
 /* I want to use React for the frontend of this project*/
 
-// Set localHost port to listen at
+//set localHost port to listen at
 const PORT = process.env.PORT || 3000;
 
-// Add middware for parsing request bodies here:
+//middleware for parsing request bodies
 app.use(express.json());
 app.use(express.urlencoded({extended: true})); 
 
-// Add middleware for handling CORS requests and security
+//middleware for handling CORS requests and security
 app.use(cors());
 app.use(helmet());
 
-// middleware for logging
+//middleware for logging
 app.use(morgan('dev'));
 
-// set up session
+//set up session
 app.use(session({
     name: 'nsluUserToken',
     secret: process.env.SESSION_SECRET,  
@@ -64,19 +61,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, done) => {
-  //console.log('inside Serialize')
-  //console.log(user.id);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  //console.log('inside Deserialize');
   const loggedInUser = await db.User.findOne({
     where: {
       id: id
     }
   });
-  //console.log(loggedInUser.dataValues)
   if (!loggedInUser.dataValues) {
     return done(new Error('failed to deserialize'));
   }
@@ -115,7 +108,6 @@ app.route('/auth/login')
 app.use('/ulp', ulpRouter);
 app.use('/auth', authRouter);
 
-// Add your code to start the server listening at PORT below:   
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
