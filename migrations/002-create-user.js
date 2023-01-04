@@ -37,6 +37,10 @@ module.exports = {
         defaultValue: false,
         type: Sequelize.BOOLEAN
       },
+      role: {
+        defaultValue: 'member',
+        type: Sequelize.ENUM('member', 'steward', 'admin')
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

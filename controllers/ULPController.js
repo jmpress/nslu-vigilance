@@ -1,20 +1,19 @@
-const express = require('express');
+//const express = require('express');
 const db = require('../models/index');
 const Router = require('express-promise-router');
 const ulpRouter = new Router();
-const imageCache = require('../utils/cache');
-const { sanitizeInput, sanitizeUlpdata, formatUlpdata } = require('../utils/utils');
-const { isSteward, isAdmin } = require('../utils/authUtils');
+const { sanitizeUlpdata, formatUlpdata } = require('../utils/utils');
+const { authorizeAdmin, authorizeSteward, authorizeSelf } = require('../utils/authUtils');
 
 //this should be locked down to admins
-ulpRouter.get('/all', isAdmin, async (req, res, next) => {
+ulpRouter.get('/all', authorizeAdmin, async (req, res, next) => {
     const rawUlpdata = await db.Ulpdata.findAll();
     const formattedUlpdata = formatUlpdata(rawUlpdata);
     res.status(200).send(formattedUlpdata);
 });
 
 //all tickets that match a currently logged-in steward's store
-ulpRouter.get('/mystore', isSteward, async (req, res, next) => {
+ulpRouter.get('/mystore', authorizeSteward, async (req, res, next) => {
     console.log(`List of tickets belonging to store number ${req.user.store_number}`)
     const rawUlpdata = await db.Ulpdata.findAll({
                                             where:{
@@ -37,24 +36,27 @@ ulpRouter.get('/mine', async (req, res, next) => {
     res.status(200).send(formattedUlpdata);
 });
 
+//should be some authentication on this route
 ulpRouter.route('/:id')
-    .get(async (req, res, next) => {
+    .get(authorizeSelf, async (req, res, next) => {                       
         //read ONE accessible ticket to show details
-        const {dataValues} = await db.Ulpdata.findOne({
-            where: {
-                id: req.params.id
-            }
-        });
-        if(!dataValues){
-            res.status(404).send();
-        } else {
+        try{
+            const {dataValues} = await db.Ulpdata.findOne({
+                where: {
+                    id: req.params.id
+                }
+            });
             res.status(200).send(dataValues);
+        } catch {
+            res.status(404).send();
         }
     })
-    .put(async (req, res, next) => {
+    .put(authorizeSelf, async (req, res, next) => {
         //edit details of ONE accessible ticket
+        await db.Ulpdata.update(req.body, {where: {id: req.body.id}});
+        res.status(200).send();
     })
-    .delete(async (req, res, next) => {
+    .delete(authorizeAdmin, async (req, res, next) => {
         //delete one accessible record.
         const targetRecord = await db.Ulpdata.findAll({where: {id: req.params.id}});
         await db.Ulpdata.destroy({where: {id: req.params.id}});

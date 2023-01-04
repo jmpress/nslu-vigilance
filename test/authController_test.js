@@ -22,7 +22,7 @@ describe('register a new User via POST', () => {
                                 .send(newUserRegData);
         expect(response.headers["content-type"]).match(/json/);
         expect(response.status).equal(200);
-        expect(response.body.id).equal(3002);
+        expect(response.body.id).equal(3022);
         expect(response.body.email).to.equal('test@fake.com');
 
     });

@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     salted_hashed_pass: DataTypes.STRING,
     store_number: DataTypes.INTEGER,
     email_verified: DataTypes.BOOLEAN,
+    role: DataTypes.ENUM('member', 'steward', 'admin'),
   }, {
     sequelize,
     modelName: 'User',

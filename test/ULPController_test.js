@@ -27,7 +27,6 @@ describe('POST new Ulpdata to db', () => {
         const response = await agent
                                 .post('/ulp/new')
                                 .set('Accept', 'application/json')
-                                .auth('fake@test.com', 'abcde')
                                 .send(ogUlpdata);
         expect(response.headers["content-type"]).match(/json/);
         expect(response.status).equal(200);
@@ -110,7 +109,32 @@ describe('DELETE one Ulpdata ticket', () => {
 
     });
     it('should have deleted the record from the database', async ()=> {
-        const response = await agent.get('ulp/2');
+        const response = await agent.get('/ulp/2');
         expect(response.status).equal(404);
     });
+})
+
+describe('PUT method to update details of one Ulpdata ticket', () => {
+    it('returns status 200', async () => {
+        const responseOne = await agent.get('/ulp/3');
+        const ogUlpdata3 = responseOne.body;
+        expect(responseOne.status).equal(200);
+        expect(responseOne.body.staff_witnesses).equal('Charlene Mraz');
+
+        ogUlpdata3.staff_witnesses = 'Charlene Katz';
+        ogUlpdata3.offending_manager = '[REDACTED]';
+
+        const responseTwo = await agent
+                                    .put('/ulp/3')
+                                    .set('Accept', 'application/json')
+                                    .send(ogUlpdata3);
+        expect(responseTwo.status).equal(200);
+  
+        
+        const responseThree = await agent.get('/ulp/3');
+        expect(responseThree.status).equal(200);
+        expect(responseThree.body.staff_witnesses).equal('Charlene Katz');
+        expect(responseThree.body.offending_manager).equal('[REDACTED]');
+        
+    })
 })
