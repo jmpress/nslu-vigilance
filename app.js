@@ -17,6 +17,7 @@ const { comparePasswords } = require('./utils/utils');
 //controllers
 const ulpRouter = require('./controllers/ULPController');
 const authRouter = require('./controllers/authController');
+const adminRouter = require('./controllers/adminController');
 
 //database setup
 const db = require('./models/index')
@@ -107,6 +108,7 @@ app.route('/auth/login')
 
 app.use('/ulp', ulpRouter);
 app.use('/auth', authRouter);
+app.use('/admin', adminRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);

@@ -19,11 +19,8 @@ function authorizeSteward(req, res, next){
 }
 
 async function authorizeSelf(req, res, next){
-    console.log(req.user.id);
-    console.log(req.params.id);
     const txSubmitId = await db.Ulpdata.findOne({where: {id:req.params.id}},{attributes: ['submitted_by']})
     if(txSubmitId){
-        //console.log(txSubmitId.dataValues);
         if(req.user.id === txSubmitId.dataValues.submitted_by || req.user.role === 'steward' || req.user.role === 'admin'){
             console.log('user is authorized')
 
