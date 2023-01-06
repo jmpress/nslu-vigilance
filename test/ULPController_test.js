@@ -101,6 +101,16 @@ describe('GET details of one Ulpdata ticket', () => {
     });
 });
 
+describe('GET details of one Ulpdata ticket that I did NOT submit', () => {
+    it('returns status 200, with a JSON formatted Ulpdata object of id = 142', async () =>{
+        const response = await agent.get('/ulp/142');
+        expect(response.status).equal(200);
+        expect(response.headers["content-type"]).match(/json/);
+        expect(response.body.id).equal(142);
+        expect(response.body.staff_witnesses).equal('Perry Huel');
+    });
+});
+
 describe('DELETE one Ulpdata ticket', () => {
     it('returns status 200 and the deleted record', async () => {
         const response = await agent.delete('/ulp/2');
