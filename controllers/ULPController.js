@@ -72,6 +72,7 @@ ulpRouter.post('/new', async (req, res, next) => {
     let suspectData = { submitted_by, subsec1, subsec2, subsec3, subsec4, subsec5, subsec6, subsec7, date_of_incident, store_number, staff_witnesses, offending_manager, incident_summary };
     const cleanData = sanitizeUlpdata(suspectData);
     const newUlpdata = await db.Ulpdata.create(cleanData);
+    //NOTIFY STEWARD
     res.status(200).send(newUlpdata);
 });
 
