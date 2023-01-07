@@ -4,6 +4,8 @@
 #### By Jeffrey Press
 
 ## Description
+This is a work in progress.
+
 This app was built to carry out the following behaviors:<br>
 + Assist rank and file members of New Seasons Labor Union in knowing and utilizing their rights around the filing of Unethical Labor Practice claims through the National Labor Relations Board.
 + Allow member registration via local authentication, with email verification process to confirm.
@@ -16,15 +18,19 @@ This app was built to carry out the following behaviors:<br>
 ## Specs
 + User model 
 + Ulpdata model 
-+ Steward model 
 + Store model
-+ Admin model
 
-## Setup/Installation Requirements
+## Setup/Installation Instructions
 + Fork and clone this repository locally.
 + Install Node.
 + Navigate to folder and run `npm install` in the console.
-+ run `npm start` in the console.
++ To run this, you'll need to point it to both a PostgreSQL server and a Redis server by editting the `DATABASE_URL` and `SESSION_DATABASE_URL` variables in the `.env` file to match your servers.
++ If you don't have a PostgreSQL or Redis server yet, I recommend using Docker. Building a Docker image for this app is on my to-do list, but you can run the database servers using the latest Redis and PostgreSQL images on [Docker Hub](https://hub.docker.com/). More information about getting started with Docker can be found [here](https://blog.iron.io/how-to-create-a-docker-container/).
++ If you'd prefer to run your PostgreSQL server locally, see this [link](https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql/) for details on setting one up.
++ If you'd prefer to run your Redis server locally as well, try [this link](https://redis.io/docs/getting-started/installation/).
++ You'll also need 
++ run `npm test` in the console to create tables and seed with random data. It will then run several tests to make sure everything is working properly.
++ run `npm start` in the console to begin the server.
 + navigate to localhost:3000 to begin using the program.
 
 ## Known Bugs
@@ -37,7 +43,6 @@ Please contact j.michael.press@gmail.com with questions, comments, or concerns. 
    + Javascript
    + Node.js
    + Express
-   + React
    + PostreSQL
    + Redis
 
