@@ -1,0 +1,282 @@
+openapi: 3.0.1
+info:
+  title: nslu-vigilance
+  version: '1.0'
+  description: A back-end to handle CRUD database operations for an NLRB ULP form helper
+  contact:
+    email: j.michael.press@gmail.com
+    name: Jeffrey Press
+    url: https://jmpress.github.io/
+paths:
+  /auth/login:
+    summary: Authenticates user via Passportjs
+    post:
+      summary: User log-in
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - auth
+  /auth/logout:
+    summary: Logs the current user out via Passportjs (req.logout())
+    post:
+      summary: Ends session and logs user out.
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - auth
+  /auth/register:
+    summary: Handles registration of new user accounts.
+    post:
+      summary: Creates a new User in the database.
+      description: ''
+      operationId: ''
+      requestBody:
+        description: A new User object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                newlyRegisteredUser:
+                  value: >
+                    {"first_name":"Kniipe","last_name":"Jeksl","email":"kniipeRulez@protonmail.net","store_number":2,"salted_hashed_pass":"encryptedString","email_verified":false}
+          description: >-
+            Returns a copy of the newly registered user.
+        default:
+          description: Default error sample response
+      tags:
+        - auth
+  /auth/profile:
+    summary: Handles access to user profile data.
+  /ulp/all:
+    summary: Returns an array of all Ulpdata objects in the database.
+    get:
+      summary: Admin Only. Retrieves array of all Ulpdata records in the database.
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                allUlpdata:
+                  value: >-
+                    [{"id":1,"submitted_by":23,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":false,"subsec6":false,"subsec7":false,"date_of_incident":"10-10-22","store_number":2,"staff_witnesses":"none","offending_manager":"Kniipe
+                    Jeksl","incident_summary":"lorem ipsum
+                    etc"},{"id":2,"submitted_by":138,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":true,"subsec6":false,"subsec7":false,"date_of_incident":"10-14-22","store_number":7,"staff_witnesses":"none","offending_manager":"Gerkeh
+                    Pistelle","incident_summary":"lorem ipsum etc"}]
+          description: Returns an array of all Ulpdata objects in the database.
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+  /ulp/mine:
+    summary: For Ulpdata records that are owned by the currently logged-in user.
+    get:
+      summary: >-
+        Retrieves an array of all Ulpdata records that were submitted by the
+        currently logged-in user.
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                myUlpdata:
+                  value: >-
+                    [{"id":1,"submitted_by":3,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":false,"subsec6":false,"subsec7":false,"date_of_incident":"10-10-22","store_number":2,"staff_witnesses":"none","offending_manager":"Kniipe
+                    Jeksl","incident_summary":"lorem ipsum
+                    etc"},{"id":2,"submitted_by":3,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":true,"subsec6":false,"subsec7":false,"date_of_incident":"10-14-22","store_number":7,"staff_witnesses":"none","offending_manager":"Gerkeh
+                    Pistelle","incident_summary":"lorem ipsum etc"}]
+          description: >-
+            Returns an array of all Ulpdata objects in the database where the
+            submitted_by field is equal to the user id of the currently logged
+            in user.
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+  /ulp/mystore:
+    summary: For Ulpdata records from a single store, for Steward access.
+    get:
+      summary: >-
+        Retrieves an array of all Ulpdata records for the currently logged-in
+        Steward's store.
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                myStoreUlpdata:
+                  value: >-
+                    [{"id":1,"submitted_by":32,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":false,"subsec6":false,"subsec7":false,"date_of_incident":"10-10-22","store_number":14,"staff_witnesses":"none","offending_manager":"Kniipe
+                    Jeksl","incident_summary":"lorem ipsum
+                    etc"},{"id":2,"submitted_by":138,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":true,"subsec6":false,"subsec7":false,"date_of_incident":"10-14-22","store_number":14,"staff_witnesses":"none","offending_manager":"Gerkeh
+                    Pistelle","incident_summary":"lorem ipsum etc"}]
+          description: >-
+            Returns an array of all Ulpdata objects in the database where the
+            store_number field is equal to the currently logged in user's
+            store_number if the user's role is 'steward'.
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+  /ulp/new:
+    summary: Handles creating a new Ulpdata record in the database.
+    post:
+      summary: >-
+        Creates a new Ulpdata record in the database and notifies the relevant
+        Store Steward.
+      description: ''
+      operationId: ''
+      requestBody:
+        description: A new Ulpdata object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ulpdata'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+  /ulp/{id}:
+    summary: Handling operation of methods for single Ulpdata records with id={id}
+    get:
+      summary: Retrieve details of one accessible Ulpdata record.
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                singleTicketbyID23:
+                  value: >-
+                    {"id":23,"submitted_by":32,"subsec1":true,"subsec2":false,"subsec3":false,"subsec4":false,"subsec5":false,"subsec6":false,"subsec7":false,"date_of_incident":"10-10-22","store_number":14,"staff_witnesses":"none","offending_manager":"Kniipe
+                    Jeksl","incident_summary":"lorem ipsum etc"}
+          description: >-
+            Returns a single ticket with ID matching the request parameter in the URL.
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+    put:
+      summary: Update the details of one accessible Ulpdata record.
+      description: ''
+      operationId: ''
+      requestBody:
+        description: A new Ulpdata object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ulpdata'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+    delete:
+      summary: Admin Only. Delete one accessible Ulpdata record from the database.
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - ulpdata
+    parameters:
+      - name: id
+        in: path
+        description: The id of the Ulpdata record in question.
+        required: true
+        schema:
+          type: integer
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        salted_hashed_pass:
+          type: string
+        store_number:
+          type: integer
+        email_verified:
+          type: boolean
+        role:
+          type: string
+    Ulpdata:
+      type: object
+      properties:
+        id:
+          type: integer
+        submitted_by:
+          type: integer
+        subsec1:
+          type: boolean
+        subsec2:
+          type: boolean
+        subsec3:
+          type: boolean
+        subsec4:
+          type: boolean
+        subsec5:
+          type: boolean
+        subsec6:
+          type: boolean
+        subsec7:
+          type: boolean
+        date_of_incident:
+          type: string
+        store_number:
+          type: integer
+        staff_witnesses:
+          type: string
+        offending_manager:
+          type: string
+        incident_summary:
+          type: string
+    Store:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        abbr:
+          type: string
+        street_address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        phone_number:
+          type: string
+        fax_number:
+          type: string
+        store_manager:
+          type: string
