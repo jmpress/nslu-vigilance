@@ -44,10 +44,11 @@ Please contact j.michael.press@gmail.com with questions, comments, or concerns. 
    + Node.js
    + Express
    + PostreSQL
-   + Redis
+   + Redis (currently running in a Docker container)
+   + Testing stack: Mocha, Chai, and Supertest 
 
 ## Notable `npm` packages
-   + Sequelizer ORM
+   + Sequelize and sequelize-cli
    + Passport.js
    
 ### License
